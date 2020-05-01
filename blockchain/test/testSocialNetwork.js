@@ -66,7 +66,7 @@ contract("Test SocialNetwork.sol", async(accounts) => {
         );
     });
 
-    it(`[${CLASS_NAME}] Test 3: sending message between users`, async () => {
+    it(`[${CLASS_NAME}] Test 4: sending message between users`, async () => {
         const contract = await SocialNetwork.deployed();
         
         const addUser = await contract.addUser(2);
