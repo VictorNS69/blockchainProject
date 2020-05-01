@@ -6,6 +6,15 @@ contract SocialNetwork {
     
     event addUserEvent(uint256 _user, uint256 _timestamp);
     event removeUserEvent(uint256 _user, uint256 _timestamp);
+    event messageSendEvent(uint256 _user1, uint256 _user2, uint256 _timestamp);
+    
+    function getUsers() public view returns (uint256 [] memory _users){
+        return usersID;
+    }
+    
+    function getUser(uint256 _user) public view returns (bool _value){
+        return users[_user];
+    }
     
     function addUser(uint256 _user) public {
         require(!users[_user], "This user is already in the system");
@@ -16,13 +25,11 @@ contract SocialNetwork {
     
     function removeUser(uint256 _user) public {
         require(users[_user], "This user is not in the system");
-        //users[_user] = false;
         delete users[_user];
-        //usersID.push(_user);
         for (uint i = 0; i < usersID.length; i++){
             if (usersID[usersID.length-1] == _user){
-                delete usersID[usersID.length-1];
                 usersID.length--;
+                emit removeUserEvent(_user, block.timestamp);
                 return;
             }
             else if(usersID[i] == _user){
@@ -30,24 +37,14 @@ contract SocialNetwork {
                     usersID[j] = usersID[j+1];
                 }
                 usersID.length--;            
-                //delete usersID[usersID.length-1];
+                emit removeUserEvent(_user, block.timestamp);
             }
         }
-        
-        emit removeUserEvent(_user, block.timestamp);
     }
-    
-    // login
-    
-    // logout
-    
-    //message (U1, U2)
-    
-    function getUsers() public view returns (uint256 [] memory _users){
-        return usersID;
-    }
-    
-    function getUser(uint256 _user) public view returns (bool _value){
-        return users[_user];
+
+    function sendMessage(uint256 _user1, uint256 _user2) public{
+        require(users[_user1], "The user 1 is not in the system");
+        require(users[_user2], "The user 2 is not in the system");
+        emit messageSendEvent(_user1, _user2, block.timestamp);
     }
 }
