@@ -6,7 +6,7 @@ contract SocialNetwork {
     
     event addUserEvent(uint256 _user, uint256 _timestamp);
     event removeUserEvent(uint256 _user, uint256 _timestamp);
-    event sendMessageEvent(uint256 _user1, uint256 _user2, uint256 _timestamp);
+    event sendMessageEvent(uint256 _user1, uint256 _user2, uint256 _timestamp, string _message);
     
     function getUsers() public view returns (uint256 [] memory _users){
         return usersID;
@@ -42,9 +42,11 @@ contract SocialNetwork {
         }
     }
 
-    function sendMessage(uint256 _user1, uint256 _user2) public{
+    function sendMessage(uint256 _user1, uint256 _user2, string memory _message) public{
         require(users[_user1], "The user 1 is not in the system");
         require(users[_user2], "The user 2 is not in the system");
-        emit sendMessageEvent(_user1, _user2, block.timestamp);
+        require(bytes(_message).length > 0);
+        emit sendMessageEvent(_user1, _user2, block.timestamp, _message);
     }
 }
+

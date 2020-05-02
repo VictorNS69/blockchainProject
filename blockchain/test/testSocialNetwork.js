@@ -47,7 +47,7 @@ contract("Test SocialNetwork.sol", async(accounts) => {
         assert.equal(1, users.length);
 
         await truffleAssert.fails(
-            contract.sendMessage(1, 2),
+            contract.sendMessage(1, 2, "hola"),
             truffleAssert.ErrorType.REVERT,
             "The user 2 is not in the system"
         );
@@ -60,7 +60,7 @@ contract("Test SocialNetwork.sol", async(accounts) => {
         assert.equal(1, users.length);
 
         await truffleAssert.fails(
-            contract.sendMessage(2, 1),
+            contract.sendMessage(2, 1, "holi"),
             truffleAssert.ErrorType.REVERT,
             "The user 1 is not in the system"
         );
@@ -77,10 +77,19 @@ contract("Test SocialNetwork.sol", async(accounts) => {
         let users = await contract.getUsers();
         assert.equal(2, users.length);
         
-        const sendMessage = await contract.sendMessage(1,2);
+        const sendMessage = await contract.sendMessage(1,2,"hello");
         truffleAssert.eventEmitted(sendMessage, "sendMessageEvent", (event) => {
-            return event._user1 == 1 && event._user2 == 2;
+            return event._user1 == 1 && event._user2 == 2 && event._message === "hello";
         });
     });
 
+    it(`[${CLASS_NAME}] Test 5: removing nonexisting user`, async () => {
+        const contract = await SocialNetwork.deployed();
+
+        await truffleAssert.fails(
+            contract.removeUser(41),
+            truffleAssert.ErrorType.REVERT,
+            "This user is not in the system"
+        );
+    });
 });
