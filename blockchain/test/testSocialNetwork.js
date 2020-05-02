@@ -24,7 +24,7 @@ contract("Test SocialNetwork.sol", async(accounts) => {
         assert.equal(true, user);
     });
 
-    it(`[${CLASS_NAME}] Test 2: adding a existing user`, async () => {
+    it(`[${CLASS_NAME}] Test 2: adding an existing user`, async () => {
         const contract = await SocialNetwork.deployed();
         
         let users = await contract.getUsers();
@@ -40,7 +40,7 @@ contract("Test SocialNetwork.sol", async(accounts) => {
         assert.equal(1, users.length);
     });
 
-    it(`[${CLASS_NAME}] Test 3.1: sending message to an unexisting user (user 2)`, async () => {
+    it(`[${CLASS_NAME}] Test 3.1: sending message to nonexisting user (user 2)`, async () => {
         const contract = await SocialNetwork.deployed();
         
         let users = await contract.getUsers();
@@ -53,7 +53,7 @@ contract("Test SocialNetwork.sol", async(accounts) => {
         );
     });
 
-    it(`[${CLASS_NAME}] Test 3.2: sending message to an unexisting user (user 1)`, async () => {
+    it(`[${CLASS_NAME}] Test 3.2: sending message to nonexisting user (user 1)`, async () => {
         const contract = await SocialNetwork.deployed();
         
         let users = await contract.getUsers();
