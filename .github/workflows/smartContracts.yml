@@ -35,7 +35,13 @@ jobs:
 
     - name: Configure truffle permission
       run: sudo chmod -R --silent 777 ~/.config/truffle
-         
+
+    - name: Create needed file
+      working-directory: ./blockchain
+      run: |
+        mkdir -p build/contracts
+        touch build/contracts/SocialNetwork-address
+
     - name: Run tests
       working-directory: ./blockchain
       run: truffle test
