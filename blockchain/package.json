@@ -13,13 +13,23 @@
   "scripts": {
     "test": "truffle test"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VictorNS69/blockchainProject.git"
+  },
   "keywords": [
     "smart contract",
     "smart contracts",
     "SC",
     "Smart Contract",
-    "Smart Contracts"
+    "Smart Contracts",
+    "Quorum",
+    "quorum"
   ],
   "author": "Victor Nieves",
-  "license": "MIT"
+  "license": "MIT",
+  "bugs": {
+     "url": "https://github.com/VictorNS69/blockchainProject/issues"
+  },
+  "homepage": "https://github.com/VictorNS69/blockchainProject#README.md",
 }
