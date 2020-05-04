@@ -1,0 +1,35 @@
+{
+  "name": "social-network",
+  "version": "1.0.0",
+  "description": "Social Network Smart Contracts",
+  "main": "truffle-config.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "truffle-assertions": "^0.9.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "truffle test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VictorNS69/blockchainProject.git"
+  },
+  "keywords": [
+    "smart contract",
+    "smart contracts",
+    "SC",
+    "Smart Contract",
+    "Smart Contracts",
+    "Quorum",
+    "quorum"
+  ],
+  "author": "Victor Nieves",
+  "license": "MIT",
+  "bugs": {
+     "url": "https://github.com/VictorNS69/blockchainProject/issues"
+  },
+  "homepage": "https://github.com/VictorNS69/blockchainProject#README.md",
+}
