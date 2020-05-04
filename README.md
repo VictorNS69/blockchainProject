@@ -5,15 +5,15 @@
 
 crear container postgres
 ```bash
-docker run --name socialNetwork_DB -d -p 5432:5432 -e POSTGRES_PASSWORD="socialNetwork" postgres:9.6.17-alpine
+docker run --name socialNetwork_db -d -p 5432:5432 -e POSTGRES_PASSWORD="socialNetwork" postgres:9.6.17-alpine
 ```
 crear base de datos dentro del container
 ```bash
-docker exec -it socialNetwork_DB createdb socialNetwork -U postgres
+docker exec -it socialNetwork_db createdb socialNetwork -U postgres
 ```
 Acceder al terminal de postgres
 ```bash
-docker exec -it socialNetwork_DB psql -U postgres
+docker exec -it socialNetwork_db psql -U postgres
 ```
 
 ## Requisitos
@@ -32,3 +32,11 @@ para el proyecto blockchain
 ```bash
 docker run --name ganache-cli -d -p 8545:8545 trufflesuite/ganache-cli:latest
 ```
+docker run --name socialNetwork_redis -p 6379:6379  redis:6.0-alpine
+
+
+install celery sudo apt install python-celery-common
+
+celery worker -A socialNetwork --loglevel=info
+
+
