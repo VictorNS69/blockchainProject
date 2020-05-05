@@ -1,3 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, HttpResponse
+import logging
 
-# Create your views here.
+logger = logging.getLogger(__name__)
+
+
+def index(request):
+    logger.info(f"Function: {index.__name__} prints hello world")
+    return HttpResponse("Hola")
