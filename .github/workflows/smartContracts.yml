@@ -29,12 +29,13 @@ jobs:
     - name: Install truffle
       run: sudo npm install -g truffle
 
-    - name: Install truffle-assertion
-      working-directory: ./blockchain
-      run: sudo npm install truffle-assertions
-
     - name: Configure truffle permission
       run: sudo chmod -R --silent 777 ~/.config/truffle
+
+
+    - name: Install npm dependencies
+      working-directory: ./blockchain
+      run: sudo npm install 
 
     - name: Create needed file
       working-directory: ./blockchain
