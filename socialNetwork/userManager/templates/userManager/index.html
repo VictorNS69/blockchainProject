@@ -1,0 +1,46 @@
+{% extends 'userManager/base.html' %}
+
+{% block title %}Sign up{% endblock %}
+{% block body %}
+<h1>Sign up</h1>
+{% csrf_token %}
+
+<form id="myform">
+    {% csrf_token %}
+    <input name="username" id="username" type="text" placeholder="username" required/><br>
+    <input name="email" id="email" type="email" placeholder="email" required/><br>
+    <input name="password" id="password" type="password" placeholder="password" required/><br>
+    <br><br>
+    <input name="first_name" id="first_name" type="text" placeholder="first name"/>
+    <input name="last_name" id="last_name" type="text" placeholder="last name"/>
+    <br>
+    <input id="submit" type="submit" value="Create"/>
+</form>
+<script>
+    $('#myform').submit(function(f) {
+          f.preventDefault();
+          $.ajax({
+            url: "/",
+            type: "POST",
+            data: {
+              'username': $('#username').val(),
+              'email': $('#email').val(),
+              'password': $('#password').val(),
+              'first_name': $('#first_name').val(),
+              'last_name': $('#last_name').val()
+            },
+            success: function(data) {
+                const resp = "message: " + data["message"] + "\ncode: 200"
+                console.log(resp)
+                alert(resp);
+            },
+            error: function(data){
+                const resp = "message: " + data["responseJSON"]["error"] + "\ncode: " + data["status"]
+                console.log(resp)
+                alert(resp);
+            }
+          });
+          return false
+     });
+</script>
+{% endblock %}
