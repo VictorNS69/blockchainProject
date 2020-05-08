@@ -5,7 +5,7 @@
 <h1>Sign up</h1>
 {% csrf_token %}
 
-<form id="myform">
+<form id="add_user_form">
     {% csrf_token %}
     <input name="username" id="username" type="text" placeholder="username" required/><br>
     <input name="email" id="email" type="email" placeholder="email" required/><br>
@@ -17,10 +17,10 @@
     <input id="submit" type="submit" value="Create"/>
 </form>
 <script>
-    $('#myform').submit(function(f) {
+    $('#add_user_form').submit(function(f) {
           f.preventDefault();
           $.ajax({
-            url: "/",
+            url: "/add_user_service",
             type: "POST",
             data: {
               'username': $('#username').val(),
@@ -31,13 +31,13 @@
             },
             success: function(data) {
                 const resp = "message: " + data["message"] + "\ncode: 200"
-                console.log(resp)
-                alert(resp);
+                alert(data["message"]);
             },
             error: function(data){
                 const resp = "message: " + data["responseJSON"]["error"] + "\ncode: " + data["status"]
-                console.log(resp)
-                alert(resp);
+                if (data.status == 409){
+                    alert(data["responseJSON"]["error"]);
+                }
             }
           });
           return false

@@ -20,7 +20,7 @@ LOGGING = {
     'disable_existing_loggers': False,
     'formatters': {
         'verbose': {
-            'format': '[{levelname}] [{asctime}] {name}: {message}',
+            'format': '[{levelname}] [{asctime}] {name}.{funcName}: {message}',
             'style': '{',
         },
         'simple': {
