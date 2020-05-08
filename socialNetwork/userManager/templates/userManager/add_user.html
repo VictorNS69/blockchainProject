@@ -32,6 +32,7 @@
             success: function(data) {
                 const resp = "message: " + data["message"] + "\ncode: 200"
                 alert(data["message"]);
+                window.location.href = "/login";
             },
             error: function(data){
                 const resp = "message: " + data["responseJSON"]["error"] + "\ncode: " + data["status"]
@@ -40,7 +41,6 @@
                 }
             }
           });
-          return false
      });
 </script>
 {% endblock %}

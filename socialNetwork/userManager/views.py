@@ -27,15 +27,17 @@ def add_user(request):
     return render(request, 'userManager/add_user.html')
 
 
+# TODO: remove the csrf_exempt
+@csrf_exempt
 def login_view(request):
     if request.user.is_authenticated:
-        logger.info(f"Logging attempt with an already authenticated user\n\tUser: {request.user}")
+        logger.info(f"Logging attempt with an already authenticated user: {request.user}")
         return HttpResponseRedirect(reverse("index"))
 
     if request.method == 'POST':
         username = request.POST["username"]
         password = request.POST["password"]
-        logger.info(f"Logging attempt with:\n\tUsername: {username} Password: {password}")
+        logger.info(f"Logging attempt for: {username}")
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
