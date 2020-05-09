@@ -24,7 +24,7 @@ def add_user(request):
         logger.info(f"Logging attempt with an already authenticated user\n\tUser: {request.user}")
         return HttpResponseRedirect(reverse("index"))
 
-    return render(request, 'userManager/add_user.html')
+    return render(request, 'userManager/sign_up.html')
 
 
 # TODO: remove the csrf_exempt
