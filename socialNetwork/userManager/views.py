@@ -7,7 +7,6 @@ from django.urls import reverse
 from django.shortcuts import render
 from .tasks import buc
 from celery.task.control import revoke
-from django.core import serializers
 import logging
 
 
@@ -19,10 +18,6 @@ def index(request):
         message = "Not authenticated"
     else:
         message = f"Authenticated with {request.user}"
-        user = User.objects.get(username=request.user)
-        logger.info(f"User id: {user.id}")
-        id_task = buc.delay(user.id)
-        logger.info(f"ID_task es: {id_task}")
 
     return HttpResponse(message)
 
@@ -50,6 +45,10 @@ def login_view(request):
         if user is not None:
             login(request, user)
             logger.info(f"Logged successfully")
+            user_object = User.objects.get(username=username)
+            # id_task = buc.delay(user_object.id)
+            # logger.info(f"User ID: {user_object.id} ID_task: {id_task}")
+            request.session[user_object.id] = user_object.id
             return HttpResponseRedirect(reverse("index"))
         else:
             logger.info(f"Invalid credentials")
@@ -58,10 +57,22 @@ def login_view(request):
     return render(request, "userManager/login.html", {"message": None})
 
 
-def logout_view(request):
-    logger.info(f"Logout attempt for: {request.user}")
-    logout(request)
-    return render(request, "userManager/login.html", {"message": "Logged out."})
+def logout_view(request, message="Your session expired"):
+    if request.user.is_authenticated:
+        try:
+            user_object = User.objects.get(username=request.user)
+            logger.info(f"Logout attempt for: {request.user}")
+            logout(request)
+            # logger.info(f"Stopping {task_id}")
+            # revoke(task_id, terminate=True, signal='SIGKILL')
+            del request.session[user_object.id]
+        except KeyError:
+            pass
+
+        return render(request, "userManager/login.html", {"message": "Logged out"})
+
+    logger.info(f"Logout with user not authenticated: {request.user}")
+    return render(request, "userManager/login.html", {"message": message})
 
 
 # TODO: remove the csrf_exempt
@@ -97,8 +108,3 @@ def add_user_service(request):
         logger.info(f"Method not allowed: isAjax() = {request.is_ajax()} method = {request.method}")
         return JsonResponse({"error": "Method not allowed"}, status=405)
 
-
-def stop(request, task_id):
-    logger.info(f"Stopping {task_id}")
-    revoke(task_id, terminate=True, signal='SIGKILL')
-    return HttpResponse(f"Stopped process {task_id}")
