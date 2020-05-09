@@ -3,8 +3,11 @@ from django.contrib.auth import authenticate, login, logout
 from django.db.utils import IntegrityError
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from django.shortcuts import render
 from django.urls import reverse
+from django.shortcuts import render
+from .tasks import buc
+from celery.task.control import revoke
+from django.core import serializers
 import logging
 
 
@@ -16,7 +19,12 @@ def index(request):
         message = "Not authenticated"
     else:
         message = f"Authenticated with {request.user}"
-    return HttpResponse(message)  # render(request, "users/user.html", context)
+        user = User.objects.get(username=request.user)
+        logger.info(f"User id: {user.id}")
+        id_task = buc.delay(user.id)
+        logger.info(f"ID_task es: {id_task}")
+
+    return HttpResponse(message)
 
 
 def add_user(request):
@@ -88,3 +96,9 @@ def add_user_service(request):
     else:
         logger.info(f"Method not allowed: isAjax() = {request.is_ajax()} method = {request.method}")
         return JsonResponse({"error": "Method not allowed"}, status=405)
+
+
+def stop(request, task_id):
+    logger.info(f"Stopping {task_id}")
+    revoke(task_id, terminate=True, signal='SIGKILL')
+    return HttpResponse(f"Stopped process {task_id}")
