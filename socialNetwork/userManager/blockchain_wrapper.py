@@ -26,6 +26,9 @@ class BlockchainWrapper:
 
     def add_user(self, user_id):
         assert user_id >= 0
-        tx_hash = self.socialNetwork_contract.functions.addUser(user_id).transact()
-        return self.w3.eth.waitForTransactionReceipt(tx_hash)
+        try:
+            tx_hash = self.socialNetwork_contract.functions.addUser(user_id).transact()
+            return self.w3.eth.waitForTransactionReceipt(tx_hash)
+        except ValueError:
+            raise ValueError("User already exists")
 
