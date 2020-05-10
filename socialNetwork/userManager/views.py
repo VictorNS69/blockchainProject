@@ -95,18 +95,22 @@ def add_user_service(request):
             return JsonResponse({"error": "This email is already registered"}, status=409)
 
         try:
+            wrapper = BlockchainWrapper()
+            logger.info(f"Listening to contract: {wrapper.get_contract_address()} in {wrapper.get_node_url()}")
             user = User.objects.create_user(username=username, email=email, password=password,
                                             first_name=first_name, last_name=last_name)
-            user.save()
-            logger.debug(f"User saved!")
-            wrapper = BlockchainWrapper()
-            wrapper.add_user(user_id=user.id)
-            return JsonResponse({"message": " User saved"}, status=200)
+            bc_add_user = wrapper.add_user(user_id=user.id)
+            if bc_add_user is not None:
+                user.save()
+                logger.debug(f"User {user.id} saved!")
+                return JsonResponse({"message": " User saved"}, status=200)
+
         except (IOError, ConnectionError) as e:
-            logger.error(f"ERROR: {e}")
-            return JsonResponse({"error": e}, status=500)
-        except IntegrityError as e:
-            logger.error(f"User already exists \n\tERROR: {e}")
+            logger.error(f"{str(e)}")
+            return JsonResponse({"error": "Internal server error"}, status=500)
+
+        except (IntegrityError, ValueError) as e:
+            logger.error(f"User already exists \n\tERROR: {str(e)}")
             # Code 409 Conflict
             return JsonResponse({"error": "Username is already taken"}, status=409)
 

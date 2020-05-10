@@ -36,7 +36,8 @@
             },
             error: function(data){
                 const resp = "message: " + data["responseJSON"]["error"] + "\ncode: " + data["status"]
-                if (data.status == 409){
+                console.log(data)
+                if (data.status == 409 || data.status == 500){
                     alert(data["responseJSON"]["error"]);
                 }
             }
