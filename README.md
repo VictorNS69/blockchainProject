@@ -76,12 +76,12 @@ docker run --name ganache-cli -d -p 8545:8545 trufflesuite/ganache-cli:latest
 **Before running this app, you need to install all requirements and do the set up.** 
 
 If so, just follow this steps:
-1. Be sure [_ganache-cli_](#ganache-cli-personal-blockchain-for-ethereum) docker is running.
-1. Go into the [blockcain](/blockchain) directory and deploy the contracts with `truffle deploy`.
-1. Be sure the [_database_](#database) is up.
+1. Be sure [ganache-cli](#ganache-cli-personal-blockchain-for-ethereum) docker is running.
+1. Go into the [blockchain](/blockchain) directory and deploy the contracts with `truffle deploy`.
+1. Be sure the [database](#database) is up.
 1. Go to the [socialNetwork](/socialNetwork) directory and stay there.
 1. Activate your [virtual environment](#virtual-environment).
-1. Be sure [_redis and celery_](#redis-broker-and-celery-task-queue) are running.
+1. Be sure [redis and celery](#redis-broker-and-celery-task-queue) are running.
 1. Do the migrations if needed (`python manage.py makemigrations` and `python manage.py migrate`)
 1. Flush the database `python manage.py flush` (this cleans the database, so there will be no conflicts with the 
 Smart Contracts)
