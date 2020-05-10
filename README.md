@@ -25,7 +25,7 @@
 `pip install -r requirements.txt`)
 ### blockchain (truffle project)
 - Node (`sudo apt install node`)
-- Truffle (`npm install -g truffel`)
+- Truffle (`npm install -g truffle`)
 - Install requirements (inside blockchain directory `npm install`)
 
 ## Set up
