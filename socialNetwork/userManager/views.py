@@ -7,6 +7,8 @@ from django.urls import reverse
 from django.shortcuts import render
 from .tasks import buc
 from celery.task.control import revoke
+from requests.exceptions import ConnectionError
+from .blockchain_wrapper import *
 import logging
 
 
@@ -97,10 +99,14 @@ def add_user_service(request):
                                             first_name=first_name, last_name=last_name)
             user.save()
             logger.debug(f"User saved!")
+            wrapper = BlockchainWrapper()
+            wrapper.add_user(user_id=user.id)
             return JsonResponse({"message": " User saved"}, status=200)
-
+        except (IOError, ConnectionError) as e:
+            logger.error(f"ERROR: {e}")
+            return JsonResponse({"error": e}, status=500)
         except IntegrityError as e:
-            logger.error(f"User already exist \n\tERROR: {e}")
+            logger.error(f"User already exists \n\tERROR: {e}")
             # Code 409 Conflict
             return JsonResponse({"error": "Username is already taken"}, status=409)
 
