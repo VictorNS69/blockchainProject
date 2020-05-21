@@ -26,6 +26,16 @@ truffle test
 (_ENOENT: no such file or directory, open 'build/contracts/SocialNetwork-address'_). If so, just create the file with 
 `touch build/contracts/SocialNetwork-address` or just run the [deploy](#deploy-the-smart-contracts)
 
+
+## Run coverage
+You can easily run the coverage with:
+```bash
+truffle run coverage
+```
+**Notice**: When you run for the first time the test, maybe an error will appear 
+(_ENOENT: no such file or directory, open 'build/contracts/SocialNetwork-address'_). If so, just create the file with 
+`touch build/contracts/SocialNetwork-address` or just run the [deploy](#deploy-the-smart-contracts)
+
 ## Deploy the Smart Contracts
 In order to deploy the Smart Contracts, you need to set up [ganache](#set-up) and run:
 ```bash
