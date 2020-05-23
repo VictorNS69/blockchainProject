@@ -18,7 +18,7 @@ contract("Test SocialNetwork.sol", async(accounts) => {
         users = await contract.getUsers();
         assert.equal(1, users.length);
 
-        bytesUser = await contract.getBytes("User1");
+        const bytesUser = await contract.getBytes("User1");
 
         user = await contract.getUser(bytesUser);
         assert.equal("User1", user);
@@ -91,5 +91,56 @@ contract("Test SocialNetwork.sol", async(accounts) => {
             truffleAssert.ErrorType.REVERT,
             "This user is not in the system"
         );
+    });
+
+    it(`[${CLASS_NAME}] Test 6: removing a user in the middle of the array (User2)`, async () => {
+        const contract = await SocialNetwork.deployed();
+        
+        const addUser = await contract.addUser("User3");
+        truffleAssert.eventEmitted(addUser, "addUserEvent", (event) => {
+            return event._user == "User3";
+        });
+
+        let users = await contract.getUsers();
+        assert.equal(3, users.length);
+
+        const bytesUser = await contract.getBytes("User2");
+
+        let user = await contract.getUser(bytesUser);
+        assert.equal("User2", user);
+
+        const delUser = await contract.removeUser("User2");
+        truffleAssert.eventEmitted(delUser, "removeUserEvent", (event) => {
+            return event._user == "User2";
+        });
+
+        users = await contract.getUsers();
+        assert.equal(2, users.length);
+
+        user = await contract.getUser(bytesUser);
+        assert.equal("", user);
+    });
+
+    xit(`[${CLASS_NAME}] Test 6: removing the last user of the array (User3)`, async () => {
+        const contract = await SocialNetwork.deployed();
+        
+        let users = await contract.getUsers();
+        assert.equal(2, users.length);
+
+        const bytesUser = await contract.getBytes("User3");
+
+        let user = await contract.getUser(bytesUser);
+        assert.equal("User3", user);
+
+        const delUser = await contract.removeUser("User3");
+        truffleAssert.eventEmitted(delUser, "removeUserEvent", (event) => {
+            return event._user == "User3";
+        });
+
+        users = await contract.getUsers();
+        assert.equal(1, users.length);
+
+        user = await contract.getUser(bytesUser);
+        assert.equal("", user);
     });
 });
