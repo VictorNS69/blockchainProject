@@ -9,9 +9,11 @@ This directory contains the truffle project with the Smart Contracts implemented
 - [Deploy the Smart Contracts](#deploy-the-smart-contracts)
 
 ## Requirements
-- Node (`sudo apt install node`)
+- Node v8.17.0
+- npm v6.13.4
 - Truffle (`npm install -g truffle`)
 - Install requirements with `npm install`
+- Docker
 
 ## Set up
 To set up this project, you need to run your local Ethereum blockchain. You can do it easily with:
@@ -23,11 +25,18 @@ You can run all the unittest with the command
 ```bash
 truffle test
 ```
-
+or with
+```bash
+npm test
+```
 ## Run coverage
 You can easily run the coverage with:
 ```bash
 truffle run coverage
+```
+or with
+```bash
+npm run-script coverage
 ```
 
 ## Deploy the Smart Contracts
@@ -35,7 +44,10 @@ In order to deploy the Smart Contracts, you need to set up [ganache](#set-up) an
 ```bash
 truffle deploy
 ```
-
+or with
+```bash
+npm run-script deploy
+```
 
 **Notice**: When you run for the first time the tests or the coverage, maybe an error will appear 
 (_ENOENT: no such file or directory, open 'build/contracts/SocialNetwork-address'_). If so, just create the file with 
