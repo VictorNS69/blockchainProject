@@ -9,8 +9,8 @@ This directory contains the truffle project with the Smart Contracts implemented
 - [Deploy the Smart Contracts](#deploy-the-smart-contracts)
 
 ## Requirements
-- Node v8.17.0
-- npm v6.13.4
+- Node (>= v8.17.0)
+- npm (>= v6.13.4)
 - Truffle (`npm install -g truffle`)
 - Install requirements with `npm install`
 - Docker
