@@ -34,11 +34,10 @@ jobs:
     
     - name: Install truffle
       working-directory: ./blockchain
-      run: sudo npm install -g truffle
+      run: npm install -g truffle
 
-    - name: Configure truffle permission
-      run: sudo chmod -R --silent 777 ~/.config/truffle
-
+    # - name: Configure truffle permission
+    #  run: sudo chmod -R --silent 777 ~/.config/truffle
 
     - name: Install npm dependencies
       working-directory: ./blockchain
