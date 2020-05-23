@@ -3,8 +3,9 @@ const truffleAssert = require("truffle-assertions");
 
 contract("Test SocialNetwork.sol", async(accounts) => {
     const CLASS_NAME = "SocialNetwork";
+    let TEST_ID = 1;
 
-    it(`[${CLASS_NAME}] Test 1: adding new user (User1)`, async () => {
+    it(`[${CLASS_NAME}] Test ${TEST_ID++}: adding new user (User1)`, async () => {
         const contract = await SocialNetwork.deployed();
 
         let users = await contract.getUsers();
@@ -24,7 +25,7 @@ contract("Test SocialNetwork.sol", async(accounts) => {
         assert.equal("User1", user);
     });
 
-    it(`[${CLASS_NAME}] Test 2: adding an existing user (User1)`, async () => {
+    it(`[${CLASS_NAME}] Test ${TEST_ID++}: adding an existing user (User1)`, async () => {
         const contract = await SocialNetwork.deployed();
         
         let users = await contract.getUsers();
@@ -40,7 +41,7 @@ contract("Test SocialNetwork.sol", async(accounts) => {
         assert.equal(1, users.length);
     });
 
-    it(`[${CLASS_NAME}] Test 3.1: sending message to nonexisting user (User2)`, async () => {
+    it(`[${CLASS_NAME}] Test ${TEST_ID++}: sending message to nonexisting user (User2)`, async () => {
         const contract = await SocialNetwork.deployed();
         
         let users = await contract.getUsers();
@@ -53,7 +54,7 @@ contract("Test SocialNetwork.sol", async(accounts) => {
         );
     });
 
-    it(`[${CLASS_NAME}] Test 3.2: sending message from nonexisting user (User2)`, async () => {
+    it(`[${CLASS_NAME}] Test ${TEST_ID++}: sending message from nonexisting user (User2)`, async () => {
         const contract = await SocialNetwork.deployed();
         
         let users = await contract.getUsers();
@@ -66,7 +67,7 @@ contract("Test SocialNetwork.sol", async(accounts) => {
         );
     });
 
-    it(`[${CLASS_NAME}] Test 4: sending message between users (User2)`, async () => {
+    it(`[${CLASS_NAME}] Test ${TEST_ID++}: sending message between users (User2)`, async () => {
         const contract = await SocialNetwork.deployed();
         
         const addUser = await contract.addUser("User2");
@@ -83,7 +84,7 @@ contract("Test SocialNetwork.sol", async(accounts) => {
         });
     });
 
-    it(`[${CLASS_NAME}] Test 5: removing nonexisting user (User0)`, async () => {
+    it(`[${CLASS_NAME}] Test ${TEST_ID++}: removing nonexisting user (User0)`, async () => {
         const contract = await SocialNetwork.deployed();
 
         await truffleAssert.fails(
@@ -93,7 +94,7 @@ contract("Test SocialNetwork.sol", async(accounts) => {
         );
     });
 
-    it(`[${CLASS_NAME}] Test 6: removing a user in the middle of the array (User2)`, async () => {
+    it(`[${CLASS_NAME}] Test ${TEST_ID++}: removing a user in the middle of the array (User2)`, async () => {
         const contract = await SocialNetwork.deployed();
         
         const addUser = await contract.addUser("User3");
@@ -121,7 +122,7 @@ contract("Test SocialNetwork.sol", async(accounts) => {
         assert.equal("", user);
     });
 
-    it(`[${CLASS_NAME}] Test 6: removing the last user of the array (User3)`, async () => {
+    it(`[${CLASS_NAME}] Test ${TEST_ID++}: removing the last user of the array (User3)`, async () => {
         const contract = await SocialNetwork.deployed();
         
         let users = await contract.getUsers();
