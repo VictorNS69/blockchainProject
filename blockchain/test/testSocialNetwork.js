@@ -121,7 +121,7 @@ contract("Test SocialNetwork.sol", async(accounts) => {
         assert.equal("", user);
     });
 
-    xit(`[${CLASS_NAME}] Test 6: removing the last user of the array (User3)`, async () => {
+    it(`[${CLASS_NAME}] Test 6: removing the last user of the array (User3)`, async () => {
         const contract = await SocialNetwork.deployed();
         
         let users = await contract.getUsers();
