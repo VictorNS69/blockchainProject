@@ -4,34 +4,34 @@ const truffleAssert = require("truffle-assertions");
 contract("Test SocialNetwork.sol", async(accounts) => {
     const CLASS_NAME = "SocialNetwork";
 
-    it(`[${CLASS_NAME}] Test 1: adding new user`, async () => {
+    it(`[${CLASS_NAME}] Test 1: adding new user (User1)`, async () => {
         const contract = await SocialNetwork.deployed();
 
         let users = await contract.getUsers();
         assert.equal(0, users.length);
 
-        let user = await contract.getUser(1);
-        assert.equal(false, user);
-
-        const addUser = await contract.addUser(1);
+        const addUser = await contract.addUser("User1");
         truffleAssert.eventEmitted(addUser, "addUserEvent", (event) => {
-            return event._user == 1;
+            return event._user == "User1";
         });
+
         users = await contract.getUsers();
         assert.equal(1, users.length);
 
-        user = await contract.getUser(1);
-        assert.equal(true, user);
+        bytesUser = await contract.getBytes("User1");
+
+        user = await contract.getUser(bytesUser);
+        assert.equal("User1", user);
     });
 
-    it(`[${CLASS_NAME}] Test 2: adding an existing user`, async () => {
+    it(`[${CLASS_NAME}] Test 2: adding an existing user (User1)`, async () => {
         const contract = await SocialNetwork.deployed();
         
         let users = await contract.getUsers();
         assert.equal(1, users.length);
 
         await truffleAssert.fails(
-            contract.addUser(1),
+            contract.addUser("User1"),
             truffleAssert.ErrorType.REVERT,
             "This user is already in the system"
         );
@@ -40,54 +40,54 @@ contract("Test SocialNetwork.sol", async(accounts) => {
         assert.equal(1, users.length);
     });
 
-    it(`[${CLASS_NAME}] Test 3.1: sending message to nonexisting user (user 2)`, async () => {
+    it(`[${CLASS_NAME}] Test 3.1: sending message to nonexisting user (User2)`, async () => {
         const contract = await SocialNetwork.deployed();
         
         let users = await contract.getUsers();
         assert.equal(1, users.length);
 
         await truffleAssert.fails(
-            contract.sendMessage(1, 2, "hola"),
+            contract.sendMessage("User1", "User2", "hello"),
             truffleAssert.ErrorType.REVERT,
             "The user 2 is not in the system"
         );
     });
 
-    it(`[${CLASS_NAME}] Test 3.2: sending message to nonexisting user (user 1)`, async () => {
+    it(`[${CLASS_NAME}] Test 3.2: sending message from nonexisting user (User2)`, async () => {
         const contract = await SocialNetwork.deployed();
         
         let users = await contract.getUsers();
         assert.equal(1, users.length);
 
         await truffleAssert.fails(
-            contract.sendMessage(2, 1, "holi"),
+            contract.sendMessage("User2", "User1", "hello"),
             truffleAssert.ErrorType.REVERT,
             "The user 1 is not in the system"
         );
     });
 
-    it(`[${CLASS_NAME}] Test 4: sending message between users`, async () => {
+    it(`[${CLASS_NAME}] Test 4: sending message between users (User2)`, async () => {
         const contract = await SocialNetwork.deployed();
         
-        const addUser = await contract.addUser(2);
+        const addUser = await contract.addUser("User2");
         truffleAssert.eventEmitted(addUser, "addUserEvent", (event) => {
-            return event._user == 2;
+            return event._user == "User2";
         });
 
         let users = await contract.getUsers();
         assert.equal(2, users.length);
         
-        const sendMessage = await contract.sendMessage(1,2,"hello");
+        const sendMessage = await contract.sendMessage("User1", "User2", "hello");
         truffleAssert.eventEmitted(sendMessage, "sendMessageEvent", (event) => {
-            return event._user1 == 1 && event._user2 == 2 && event._message === "hello";
+            return event._user1 == "User1" && event._user2 == "User2" && event._message === "hello";
         });
     });
 
-    it(`[${CLASS_NAME}] Test 5: removing nonexisting user`, async () => {
+    it(`[${CLASS_NAME}] Test 5: removing nonexisting user (User0)`, async () => {
         const contract = await SocialNetwork.deployed();
 
         await truffleAssert.fails(
-            contract.removeUser(41),
+            contract.removeUser("User0"),
             truffleAssert.ErrorType.REVERT,
             "This user is not in the system"
         );

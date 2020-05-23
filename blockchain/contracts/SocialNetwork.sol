@@ -20,13 +20,12 @@ contract SocialNetwork {
         return keccak256(abi.encodePacked(_string));
     }
     
-    function addUser(string memory _userString) public returns (bytes32 _bytes32) {
+    function addUser(string memory _userString) public {
         bytes32 userBytes = getBytes(_userString);
         require(bytes(users[userBytes]).length == 0, "This user is already in the system");
         users[userBytes] = _userString;
         usersID.push(userBytes);
         emit addUserEvent(_userString, block.timestamp);
-        return userBytes;
     }
     
     function removeUser(string memory _userString) public {
