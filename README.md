@@ -24,7 +24,8 @@
 - Requirements (inside socialNetwork directory with the [virtual environment](#virtual-environment) activated,
 `pip install -r requirements.txt`)
 ### blockchain (truffle project)
-- Node (`sudo apt install node`)
+- Node (>= v8.17.0)
+- npm (>= v6.13.4)
 - Truffle (`npm install -g truffle`)
 - Install requirements (inside blockchain directory `npm install`)
 
