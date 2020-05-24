@@ -5,12 +5,12 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from django.shortcuts import render
-from .tasks import buc
 from celery.task.control import revoke
 from requests.exceptions import ConnectionError
-from .blockchain_wrapper import *
 import logging
-
+from .tasks import buc
+from .blockchain_wrapper import *
+from .models import Users
 
 logger = logging.getLogger(__name__)
 
@@ -97,12 +97,15 @@ def add_user_service(request):
         try:
             wrapper = BlockchainWrapper()
             logger.info(f"Listening to contract: {wrapper.get_contract_address()} in {wrapper.get_node_url()}")
-            user = User.objects.create_user(username=username, email=email, password=password,
-                                            first_name=first_name, last_name=last_name)
-            bc_add_user = wrapper.add_user(user_id=user.id)
+            auth_user = User.objects.create_user(username=username, email=email, password=password,
+                                                 first_name=first_name, last_name=last_name)
+            bc_add_user = wrapper.add_user(username=username)
+            user_bytes = wrapper.get_user_bytes(username=username)
+            userManager_user = Users(user=auth_user, bytes=user_bytes)
             if bc_add_user is not None:
-                user.save()
-                logger.debug(f"User {user.id} saved!")
+                auth_user.save()
+                userManager_user.save()
+                logger.debug(f"User {username} saved!")
                 return JsonResponse({"message": " User saved"}, status=200)
 
         except (IOError, ConnectionError) as e:

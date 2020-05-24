@@ -18,8 +18,14 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     - uses: actions/checkout@v2
-    - uses: actions/setup-node@v1.4.2
+    - uses: actions/setup-node@v1
+      with:
+        node-version: '12'
       
+    - name: Check node and npm versions
+      working-directory: ./blockchain
+      run: echo "node version $(node --version)" && echo "npm version $(npm --version)"
+
     - name: Install docker
       run: sudo apt install docker
 
@@ -27,11 +33,11 @@ jobs:
       run: docker run -d -p 8545:8545 trufflesuite/ganache-cli:latest
     
     - name: Install truffle
-      run: sudo npm install -g truffle
+      working-directory: ./blockchain
+      run: npm install -g truffle
 
-    - name: Configure truffle permission
-      run: sudo chmod -R --silent 777 ~/.config/truffle
-
+    # - name: Configure truffle permission
+    #  run: sudo chmod -R --silent 777 ~/.config/truffle
 
     - name: Install npm dependencies
       working-directory: ./blockchain
@@ -45,4 +51,9 @@ jobs:
 
     - name: Run tests
       working-directory: ./blockchain
-      run: truffle test
+      run: npm test
+
+    - name: Run coverage
+      working-directory: ./blockchain
+      run: npm run-script coverage
+

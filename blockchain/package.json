@@ -1,4 +1,8 @@
 {
+  "engines": {
+    "node": ">=8.17.0",
+    "npm": ">=6.13.4"
+  },
   "name": "social-network",
   "version": "1.0.0",
   "description": "Social Network Smart Contracts",
@@ -13,7 +17,9 @@
     "solidity-coverage": "^0.7.5"
   },
   "scripts": {
-    "test": "truffle test"
+    "test": "truffle test",
+    "coverage": "truffle run coverage",
+    "deploy": "truffle deploy"
   },
   "repository": {
     "type": "git",

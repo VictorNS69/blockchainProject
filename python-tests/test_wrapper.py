@@ -29,16 +29,21 @@ class BlockchainWrapper:
         self.__contract_abi = info_json["abi"]
         self.__socialNetwork_contract = self.__w3.eth.contract(address=self.__contract_address, abi=self.__contract_abi)
 
-    def add_user(self, username):
+    def add_user(self, user_id):
         try:
-            tx_hash = self.__socialNetwork_contract.functions.addUser(username).transact()
-            return self.__w3.eth.waitForTransactionReceipt(tx_hash)
+            tx_hash = self.__socialNetwork_contract.functions.addUser(user_id).transact()
+            self.__w3.eth.waitForTransactionReceipt(tx_hash)
+            addUserEvent_filter = self.__socialNetwork_contract.events.addUserEvent.createFilter(fromBlock=0,
+                                                                                  argument_filters={'_user': user_id})
+            # Todos los eventos
+            event_list = addUserEvent_filter.get_all_entries()
+            # Escucha de evento filtrando
+            for element in event_list:
+                print(f"{element['args']['_user']}")
+            return element['args']['_user']
+
         except ValueError:
             raise ValueError("User already exists in the SC")
-
-    def get_user_bytes(self, username):
-        tx_hash = self.__socialNetwork_contract.functions.getBytes(username).call()
-        return '0x' + tx_hash.hex()
 
     def get_contract_address(self):
         return self.__contract_address
@@ -46,6 +51,21 @@ class BlockchainWrapper:
     def get_contract_abi(self):
         return self.__contract_abi
 
+    def get_user_bytes(self, username):
+        tx_hash = self.__socialNetwork_contract.functions.getBytes(username).call()
+        return '0x' + tx_hash.hex()
+
     @staticmethod
     def get_node_url():
         return NODE_URL
+
+if __name__ == "__main__":
+    print("--- Main ---")
+    wrapper = BlockchainWrapper()
+    print(f"Contract address: {wrapper.get_contract_address()}")
+    papi = wrapper.get_user_bytes("papi")
+    print(f"User {papi} length {len(papi)}")
+    victor = wrapper.get_user_bytes("VictorNS69")
+    print(f"User {victor} length {len(victor)}")
+    rand = wrapper.get_user_bytes("qerqwerweqtroqwertusofndsmvncxcz,mvnxzvajhfdaoirfuqworuqwiofhasodhfnakjsvbakjsdvbnxzc,vbzxnvb122313")
+    print(f"User {rand} length {len(rand)}")
