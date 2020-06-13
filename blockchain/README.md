@@ -51,5 +51,5 @@ npm run-script deploy
 
 **Notice**: When you run for the first time the tests or the coverage, maybe an error will appear 
 (_ENOENT: no such file or directory, open 'build/contracts/SocialNetwork-address'_). If so, just create the file with 
-`touch build/contracts/SocialNetwork-address` or just run the [deploy](#deploy-the-smart-contracts)
+`touch build/contracts/SocialNetwork-address` or just run the [deploy](#deploy-the-smart-contracts).
 
