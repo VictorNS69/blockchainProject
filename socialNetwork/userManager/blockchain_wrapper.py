@@ -1,8 +1,9 @@
 import json
 from requests.exceptions import ConnectionError
 from web3 import Web3, HTTPProvider
+from django.conf import settings
 
-NODE_URL = "http://ganache:8545"
+NODE_URL = settings.NODE_URL
 
 
 class BlockchainWrapper:
