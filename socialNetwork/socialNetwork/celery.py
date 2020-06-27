@@ -8,5 +8,5 @@ app = Celery('socialNetwork')
 app.config_from_object('django.conf:settings', namespace='CELERY')
 app.autodiscover_tasks()
 app.conf.update(
-    BROKER_URL='redis://localhost:6379',
+    BROKER_URL='redis://redis:6379',
 )

@@ -103,7 +103,7 @@ DATABASES = {
         'NAME': 'socialNetwork',
         'USER': 'postgres',
         'PASSWORD': 'socialNetwork',
-        'HOST': 'localhost',
+        'HOST': 'db',
         'PORT': '5432'
     }
 }
@@ -150,3 +150,4 @@ SESSION_TIMEOUT_REDIRECT = 'logout'
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+

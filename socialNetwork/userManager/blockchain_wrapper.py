@@ -2,7 +2,7 @@ import json
 from requests.exceptions import ConnectionError
 from web3 import Web3, HTTPProvider
 
-NODE_URL = "http://127.0.0.1:8545"
+NODE_URL = "http://ganache:8545"
 
 
 class BlockchainWrapper:
