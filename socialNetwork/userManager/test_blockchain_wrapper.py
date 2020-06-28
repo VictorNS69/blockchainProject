@@ -8,7 +8,7 @@ class BlockchainWrapperTests(TestCase):
     def setUp(self):
         """Set up the wrapper"""
         self.wrapper = BlockchainWrapper()
-        self.assertEqual("http://127.0.0.1:8545", self.wrapper.get_node_url())
+        self.assertEqual("http://ganache:8545", self.wrapper.get_node_url())
 
     def test_get_address(self):
         """Get the contract address"""
