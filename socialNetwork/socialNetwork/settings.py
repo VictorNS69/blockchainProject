@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+import sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -95,16 +96,26 @@ WSGI_APPLICATION = 'socialNetwork.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'socialNetwork',
-        'USER': 'postgres',
-        'PASSWORD': 'socialNetwork',
-        'HOST': 'db',
-        'PORT': '5432'
+# If CI is on, use localhost to avoid db connection problems
+if sys.argv[1] == 'test' and os.environ.get('CI') == 'On':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'socialNetwork',
+            'USER': 'postgres',
+            'PASSWORD': 'socialNetwork',
+            'HOST': 'db',
+            'PORT': '5432'
+        }
+    }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
