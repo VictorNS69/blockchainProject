@@ -13,31 +13,61 @@ on:
 jobs:
   build:
     # The type of runner that the job will run on
-    runs-on: ubuntu-latest
-    
+    runs-on: ubuntu-16.04
+
+    services:
+      db:
+        image: postgres:9.6.17-alpine
+        env:
+          POSTGRES_DB: socialNetwork
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: socialNetwork
+          POSTGRES_PORT: 5432
+        ports:
+          - 5432
+
+      ganache:
+        image: trufflesuite/ganache-cli:latest
+        ports:
+          - 8545:8545
+
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v1
 
-    - name: Install docker and docker-compose
-      run: sudo apt install docker docker-compose
+    - uses: actions/setup-node@v1
+      with:
+        node-version: '12'  
+
+    - name: Check node and npm versions
+      working-directory: ./blockchain
+      run: echo "node version $(node --version)" && echo "npm version $(npm --version)"
     
-    - name: Build dockers
+    - name: Install truffle
+      working-directory: ./blockchain
+      run: npm install -g truffle
+
+    - name: Deploy SC
+      working-directory: ./blockchain
+      run: truffle deploy
+
+    - name: Set up python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.6
+        
+    - name: Install Django requirements
       env:
         CI: On
-      run: docker-compose up -d
-    
-    - name: Stop postgres db from docker-compose
-      run: docker stop db
-    
-    # Needed this step and the previous one to pass the test in GitHub Actions CI
-    - name: Start testing db container
-      run: docker run --name test_db -d -p 5432:5432 -e POSTGRES_PASSWORD="socialNetwork" -e POSTGRES_DB="socialNetwork" postgres:9.6.17-alpine
-
-    - name: Run tests and coverage
       working-directory: ./socialNetwork
-      run: docker exec -i web coverage run manage.py test
+      run: pip install -r requirements.txt
+        
+    - name: Run tests and coverage
+      env:
+        CI: On
+      working-directory: ./socialNetwork
+      run: coverage run manage.py test
 
     - name: Run coverage report
-      run: docker exec -i web coverage report
-
+      working-directory: ./socialNetwork
+      run: coverage report
