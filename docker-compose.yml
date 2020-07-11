@@ -49,7 +49,6 @@ services:
       - net
 
   smart_contracts:
-    image: smartcontracts:1.0.0
     container_name: smart_contracts
     build: blockchain/
     command: truffle deploy --network docker

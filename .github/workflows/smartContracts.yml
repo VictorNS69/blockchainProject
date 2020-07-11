@@ -27,7 +27,7 @@ jobs:
       run: echo "node version $(node --version)" && echo "npm version $(npm --version)"
 
     - name: Install docker
-      run: apt install docker
+      run: sudo apt install docker
 
     - name: Start ganache-cli docker
       run: docker run -d -p 8545:8545 trufflesuite/ganache-cli:latest
@@ -41,7 +41,7 @@ jobs:
 
     - name: Install npm dependencies
       working-directory: ./blockchain
-      run: npm install 
+      run: sudo npm install 
 
     - name: Create needed file
       working-directory: ./blockchain
