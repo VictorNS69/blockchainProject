@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+import sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -48,7 +49,6 @@ SECRET_KEY = 'x#a)$f5+s@qbtiu!65_(ikk#4^hp@nix))32b-fa2_#519l6sp'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -93,20 +93,28 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'socialNetwork.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'socialNetwork',
-        'USER': 'postgres',
-        'PASSWORD': 'socialNetwork',
-        'HOST': 'localhost',
-        'PORT': '5432'
+# If CI is on, use localhost to avoid db connection problems
+if sys.argv[1] == 'test' and os.environ.get('CI') == 'On':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'socialNetwork',
+            'USER': 'postgres',
+            'PASSWORD': 'socialNetwork',
+            'HOST': 'db',
+            'PORT': '5432'
+        }
+    }
 
 
 # Password validation
@@ -126,7 +134,6 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
@@ -150,3 +157,5 @@ SESSION_TIMEOUT_REDIRECT = 'logout'
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+NODE_URL = "http://ganache:8545"

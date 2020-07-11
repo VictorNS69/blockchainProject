@@ -1,5 +1,6 @@
 # Social Network
 ![Smart Contracts test](https://github.com/VictorNS69/blockchainProject/workflows/Smart%20Contracts%20tests/badge.svg)
+![Django project tests](https://github.com/VictorNS69/blockchainProject/workflows/Django%20project%20tests/badge.svg)
 
 **This is a work in progress**
 

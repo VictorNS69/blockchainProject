@@ -48,6 +48,12 @@ module.exports = {
       network_id: "*",       // Any network (default: none)
      },
 
+     docker: {
+      host: "ganache",
+      port: 8545,
+      network_id: "*",
+     },
+
     // Another network with more advanced options...
     // advanced: {
       // port: 8777,             // Custom port

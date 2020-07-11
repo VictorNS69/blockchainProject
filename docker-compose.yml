@@ -1,0 +1,84 @@
+version: "3"
+
+services:
+  db:
+    image: postgres:9.6.17-alpine
+    container_name: db
+    environment:
+      - POSTGRES_DB=socialNetwork
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=socialNetwork
+      - POSTGRES_PORT=5432
+    ports:
+      - 5432:5432
+    networks:
+      - net
+
+  web:
+    restart: on-failure:2
+    container_name: web
+    build: socialNetwork/
+    image: socialnetwork:1.0.0
+    environment:
+      - CI
+    volumes:
+      - ./socialNetwork:/socialNetwork/
+      - ./blockchain/:/blockchain/
+    command: >
+      bash -c "sleep 5 && 
+      python manage.py migrate &&
+      python manage.py runserver 0.0.0.0:8000"
+    ports:
+      - 80:8000
+    networks:
+      - net
+    links:
+      - "db:db"
+    depends_on:
+      - db
+      - redis
+      - celery
+      - smart_contracts
+
+  ganache:
+    image: trufflesuite/ganache-cli:latest
+    container_name: ganache
+    ports:
+      - 8545:8545
+    networks:
+      - net
+
+  smart_contracts:
+    container_name: smart_contracts
+    build: blockchain/
+    command: truffle deploy --network docker
+    volumes:
+      - ./blockchain:/blockchain/
+    depends_on:
+      - ganache
+    networks:
+      - net
+
+  redis:
+    image: redis:6.0-alpine
+    container_name: redis
+    ports:
+      - 6379:6739
+    networks:
+      - net
+  
+  celery:
+    build: socialNetwork/
+    container_name: celery
+    image: socialnetwork:1.0.0
+    volumes:
+      - ./socialNetwork:/socialNetwork/
+    command: celery worker -A socialNetwork --loglevel=info
+    depends_on:
+      - redis
+    networks:
+      - net
+    
+networks:
+  net:
+    driver: bridge
