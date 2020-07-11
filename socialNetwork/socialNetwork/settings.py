@@ -158,4 +158,7 @@ SESSION_TIMEOUT_REDIRECT = 'logout'
 
 STATIC_URL = '/static/'
 
-NODE_URL = "http://ganache:8545"
+if sys.argv[1] == 'test' and os.environ.get('CI') == 'On':
+    NODE_URL = "http://localhost:8545"
+else:
+    NODE_URL = "http://ganache:8545"

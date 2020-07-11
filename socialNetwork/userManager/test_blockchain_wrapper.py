@@ -1,6 +1,7 @@
 from django.test import TestCase
 from .blockchain_wrapper import BlockchainWrapper
 import json
+import os
 
 
 class BlockchainWrapperTests(TestCase):
@@ -8,7 +9,10 @@ class BlockchainWrapperTests(TestCase):
     def setUp(self):
         """Set up the wrapper"""
         self.wrapper = BlockchainWrapper()
-        self.assertEqual("http://ganache:8545", self.wrapper.get_node_url())
+        if os.environ.get('CI') == 'On':
+            self.assertEqual("http://localhost:8545", self.wrapper.get_node_url())
+        else:
+            self.assertEqual("http://ganache:8545", self.wrapper.get_node_url())
 
     def test_get_address(self):
         """Get the contract address"""

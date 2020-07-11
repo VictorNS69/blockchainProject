@@ -1,7 +1,5 @@
 FROM node:8.17
 
-USER root
-
 ADD . /blockchain/
 
 WORKDIR /blockchain

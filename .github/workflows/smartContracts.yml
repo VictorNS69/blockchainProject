@@ -11,26 +11,24 @@ on:
     branches: [ master, develop ]
 
 jobs:
-  build:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+  build_and_test:
+    runs-on: ubuntu-16.04
+
+    services:
+      ganache:
+        image: trufflesuite/ganache-cli:latest
+        ports:
+          - 8545:8545
     
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v1
     - uses: actions/setup-node@v1
       with:
         node-version: '12'
-      
+
     - name: Check node and npm versions
       working-directory: ./blockchain
       run: echo "node version $(node --version)" && echo "npm version $(npm --version)"
-
-    - name: Install docker
-      run: sudo apt install docker
-
-    - name: Start ganache-cli docker
-      run: docker run -d -p 8545:8545 trufflesuite/ganache-cli:latest
     
     - name: Install truffle
       working-directory: ./blockchain
